@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Cita.css';
+
+
 
 function AppointmentScheduler() {
     const [specialties, setSpecialties] = useState([]);
@@ -25,9 +28,11 @@ function AppointmentScheduler() {
     };
 
     return (
+
         <div>
             <h2>Agendar Nueva Cita</h2>
             <label>
+
                 Especialidad:
                 <select value={selectedSpecialty} onChange={e => setSelectedSpecialty(e.target.value)}>
                     <option value="">Seleccionar...</option>
