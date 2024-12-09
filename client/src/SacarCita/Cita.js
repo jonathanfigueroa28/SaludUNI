@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './Cita.css';
-
-
 
 function AppointmentScheduler() {
     const [specialties, setSpecialties] = useState([]);
@@ -28,11 +27,9 @@ function AppointmentScheduler() {
     };
 
     return (
-
         <div>
             <h2>Agendar Nueva Cita</h2>
             <label>
-
                 Especialidad:
                 <select value={selectedSpecialty} onChange={e => setSelectedSpecialty(e.target.value)}>
                     <option value="">Seleccionar...</option>
@@ -57,6 +54,8 @@ function AppointmentScheduler() {
                     <li key={index}>{appointment.patient} - {appointment.specialty}</li>
                 ))}
             </ul>
+
+            <Link to="/">Volver a Inicio</Link>
         </div>
     );
 }

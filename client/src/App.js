@@ -1,25 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
 import './App.css';
-import Cita from './SacarCita/Cita';
+import AppointmentScheduler from './SacarCita/Cita';
 
 function App() {
-    const [showScheduler, setShowScheduler] = useState(false);
-
-    const handleShowScheduler = () => {
-        setShowScheduler(true);
-    };
-
     return (
         <div className="App">
-            {!showScheduler ? (
-                <div>
-                    <h1>Centro Médico</h1>
-                    <button onClick={handleShowScheduler}>Sacar Cita</button>
-                </div>
-            ) : (
-                <Cita />
+            <header>
+                <nav>
+                    <Link to="/">Inicio</Link> | <Link to="/sacar-cita">Sacar Cita</Link>
+                </nav>
+            </header>
 
-            )}
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <div>
+                            <h1>Centro Médico</h1>
+                            <p>Bienvenido al Centro Médico. Selecciona una opción del menú.</p>
+                        </div>
+                    }
+                />
+                <Route path="/sacar-cita" element={<AppointmentScheduler />} />
+            </Routes>
         </div>
     );
 }
