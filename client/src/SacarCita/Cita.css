@@ -89,3 +89,29 @@ li {
 li:hover {
     background-color: #e9ecef;
 }
+.specialties, .schedules {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.specialty, .schedule {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.specialty:hover, .schedule:hover {
+    background-color: #0056b3;
+}
+
+.specialty.active, .schedule.active {
+    background-color: #28a745;
+}
+

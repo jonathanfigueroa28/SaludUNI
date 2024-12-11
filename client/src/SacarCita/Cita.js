@@ -5,8 +5,10 @@ import './Cita.css';
 
 function AppointmentScheduler() {
     const [specialties, setSpecialties] = useState([]);
+    const [schedules, setSchedules] = useState([]);
     const [appointments, setAppointments] = useState([]);
     const [selectedSpecialty, setSelectedSpecialty] = useState('');
+    const [selectedSchedule, setSelectedSchedule] = useState('');
     const [patientName, setPatientName] = useState('');
 
     useEffect(() => {
@@ -19,39 +21,88 @@ function AppointmentScheduler() {
             .catch(error => console.error('Error fetching appointments:', error));
     }, []);
 
-    const handleAddAppointment = () => {
-        const newAppointment = { specialty: selectedSpecialty, patient: patientName };
-        axios.post('/api/appointments', newAppointment)
-            .then(response => setAppointments([...appointments, response.data]))
-            .catch(error => console.error('Error adding appointment:', error));
+    const fetchSchedules = (specialty) => {
+        console.log('Fetching schedules for:', specialty);
+        axios.get(`/api/schedules/${specialty}`)
+            .then(response => {
+                console.log('Schedules received:', response.data);
+                setSchedules(response.data);
+            })
+            .catch(error => console.error('Error fetching schedules:', error));
     };
+    
+
+    const handleSpecialtyClick = (specialty) => {
+        setSelectedSpecialty(specialty);
+        fetchSchedules(specialty);
+    };
+
+    const handleAddAppointment = () => {
+    const newAppointment = { 
+        specialty: selectedSpecialty, 
+        schedule: selectedSchedule, 
+        patient: patientName 
+    };
+
+    console.log('Appointment to send:', newAppointment);
+
+    axios.post('/api/appointments', newAppointment)
+        .then(response => {
+            setAppointments([...appointments, response.data]);
+        })
+        .catch(error => console.error('Error adding appointment:', error));
+};
+
 
     return (
         <div>
-            <h2>Agendar Nueva Cita</h2>
-            <label>
-                Especialidad:
-                <select value={selectedSpecialty} onChange={e => setSelectedSpecialty(e.target.value)}>
-                    <option value="">Seleccionar...</option>
-                    {specialties.map(specialty => (
-                        <option key={specialty} value={specialty}>{specialty}</option>
-                    ))}
-                </select>
-            </label>
-            <label>
-                Nombre del Paciente:
-                <input 
-                    type="text" 
-                    value={patientName} 
-                    onChange={e => setPatientName(e.target.value)} 
-                />
-            </label>
-            <button onClick={handleAddAppointment}>Agregar Cita</button>
+            <h2>Selecciona una Especialidad</h2>
+            <div className="specialties">
+                {specialties.map(specialty => (
+                    <button 
+                        key={specialty} 
+                        onClick={() => handleSpecialtyClick(specialty)} 
+                        className={`specialty ${selectedSpecialty === specialty ? 'active' : ''}`}>
+                        {specialty}
+                    </button>
+                ))}
+            </div>
+
+            {selectedSpecialty && (
+                <>
+                    <h3>Horarios Disponibles para {selectedSpecialty}</h3>
+                    <div className="schedules">
+                        {schedules.map(schedule => (
+                            <button 
+                                key={schedule} 
+                                onClick={() => setSelectedSchedule(schedule)} 
+                                className={`schedule ${selectedSchedule === schedule ? 'active' : ''}`}>
+                                {schedule}
+                            </button>
+                        ))}
+                    </div>
+                </>
+            )}
+
+            {selectedSchedule && (
+                <>
+                    <h3>Agendar Cita</h3>
+                    <label>
+                        Nombre del Paciente:
+                        <input 
+                            type="text" 
+                            value={patientName} 
+                            onChange={e => setPatientName(e.target.value)} 
+                        />
+                    </label>
+                    <button onClick={handleAddAppointment}>Confirmar Cita</button>
+                </>
+            )}
 
             <h2>Citas Programadas</h2>
             <ul>
                 {appointments.map((appointment, index) => (
-                    <li key={index}>{appointment.patient} - {appointment.specialty}</li>
+                    <li key={index}>{appointment.patient} - {appointment.specialty} ({appointment.schedule})</li>
                 ))}
             </ul>
 
@@ -61,3 +112,4 @@ function AppointmentScheduler() {
 }
 
 export default AppointmentScheduler;
+
