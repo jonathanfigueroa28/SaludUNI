@@ -11,6 +11,7 @@ app.use((req, res, next) => {
 
 
 let appointments = [];
+let separatedMedicamentos = []; // Medicamentos separados
 
 const specialties = [
     { name: 'Cardiología', schedules: ['09:00 AM', '10:00 AM', '11:00 AM'] },
@@ -21,6 +22,13 @@ const specialties = [
     { name: 'Oftalmología', schedules: ['09:00 AM', '11:00 AM', '01:00 PM'] },
     { name: 'Oncología', schedules: ['10:00 AM', '12:30 PM', '02:30 PM'] }
 ];
+
+const medicamentos = [
+    { id: 1, nombre: 'Paracetamol', descripcion: 'Analgésico y antipirético', stock: 50, disponible: 'Sí' },
+    { id: 2, nombre: 'Ibuprofeno', descripcion: 'Antiinflamatorio', stock: 30, disponible: 'Sí' },
+    { id: 3, nombre: 'Amoxicilina', descripcion: 'Antibiótico', stock: 0, disponible: 'No' }
+]
+
 
 app.get('/api/specialties', (req, res) => {
     res.json(specialties.map(s => s.name));
@@ -57,6 +65,87 @@ app.post('/api/appointments', (req, res) => {
     appointments.push(appointment);
     console.log('Appointment added:', appointment);
     res.status(201).json(appointment);
+});
+
+
+
+// Rutas para Medicamentos
+app.get('/api/medicamentos', (req, res) => {
+    res.json(medicamentos);
+    console.log('Medicamentos fetched: ', medicamentos);
+});
+
+// Obtener detalles de un medicamento por ID
+app.get('/api/medicamentos/:id', (req, res) => {
+    const medicamento = medicamentos.find(m => m.id === parseInt(req.params.id));
+    if (medicamento) {
+        res.json(medicamento);
+        console.log('Medicamento details:', medicamento);
+    } else {
+        res.status(404).send('Medicamento not found');
+    }
+});
+
+// Obtener todos los medicamentos separados
+app.get('/api/separated-medicamentos', (req, res) => {
+    res.json(separatedMedicamentos);
+    console.log('Separated medicamentos fetched: ', separatedMedicamentos);
+});
+
+// Medicamentos Separados - Agregar un medicamento separado
+app.post('/api/separated-medicamentos', (req, res) => {
+    /*
+    const { id, nombre, descripcion } = req.body;
+
+    if (!id || !nombre || !descripcion) {
+        console.error('Invalid medicamento data:', req.body);
+        return res.status(400).json({ error: 'Missing id, nombre, or descripcion' });
+    }
+
+    // Agregar el medicamento a la lista de separados
+    const newMedicamento = { id, nombre, descripcion };
+    separatedMedicamentos.push(newMedicamento);
+    console.log('New separated medicamento added:', newMedicamento);
+
+    res.status(201).json(newMedicamento);
+    */
+    const { id, nombre, descripcion } = req.body;
+    if (!id || !nombre || !descripcion) {
+        console.error('Invalid medicamento data:', req.body);
+        return res.status(400).json({ error: 'Missing id, nombre, or descripcion' });
+    }
+
+    // Buscar el medicamento en la lista principal
+    const medicamento = medicamentos.find(m => m.id === id);
+    if (!medicamento) {
+        console.error('Medicamento not found:', id);
+        return res.status(404).json({ error: 'Medicamento not found' });
+    }
+
+    // Verificar si el medicamento tiene stock suficiente
+    if (medicamento.stock <= 0) {
+        console.warn('Insufficient stock for medicamento:', medicamento);
+        return res.status(400).json({ error: 'Insufficient stock' });
+    }
+
+    // Reducir el stock del medicamento
+    medicamento.stock -= 1;
+
+    // Buscar si el medicamento ya está en la lista de separados
+    const existingSeparated = separatedMedicamentos.find(m => m.id === id);
+
+    if (existingSeparated) {
+        // Incrementar la cantidad del medicamento separado
+        existingSeparated.cantidad += 1;
+        console.log('Increased quantity for separated medicamento:', existingSeparated);
+    } else {
+        // Agregar un nuevo medicamento separado con cantidad inicial 1
+        const newMedicamento = { id, nombre, descripcion, cantidad: 1 };
+        separatedMedicamentos.push(newMedicamento);
+        console.log('New separated medicamento added:', newMedicamento);
+    }
+
+    res.status(201).json({ message: 'Medicamento separated successfully', medicamento });
 });
 
 
