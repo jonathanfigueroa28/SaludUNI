@@ -6,7 +6,7 @@ function Login({ onLoginSuccess }) {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    // Verificar si el usuario ya está autenticado en localStorage
+    
     useEffect(() => {
         if (localStorage.getItem('isAuthenticated') === 'true') {
             onLoginSuccess();
@@ -16,10 +16,10 @@ function Login({ onLoginSuccess }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Aquí agregas la lógica de autenticación
+        
         if (username === '20204055B' && password === 'password') {
-            localStorage.setItem('isAuthenticated', 'true'); // Guardar estado de autenticación
-            onLoginSuccess();  // Llamar a la función de App.js cuando el login es exitoso
+            localStorage.setItem('isAuthenticated', 'true'); 
+            onLoginSuccess();  
         } else {
             setErrorMessage('Credenciales incorrectas.');
         }

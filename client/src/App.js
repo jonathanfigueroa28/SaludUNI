@@ -7,7 +7,7 @@ import Login from './Login/Login';
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Verificar si el usuario ya está autenticado al cargar la página
+    
     useEffect(() => {
         if (localStorage.getItem('isAuthenticated') === 'true') {
             setIsAuthenticated(true);
@@ -19,7 +19,7 @@ function App() {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('isAuthenticated');  // Limpiar el estado de autenticación
+        localStorage.removeItem('isAuthenticated');  
         setIsAuthenticated(false);
     };
 
