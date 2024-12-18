@@ -9,7 +9,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 let appointments = [];
 
 const specialties = [
@@ -22,14 +21,15 @@ const specialties = [
     { name: 'Oncología', schedules: ['10:00 AM', '12:30 PM', '02:30 PM'] }
 ];
 
+// Endpoint para obtener especialidades
 app.get('/api/specialties', (req, res) => {
     res.json(specialties.map(s => s.name));
     console.log('Specialties:', specialties.map(s => s.name));
 });
 
+// Endpoint para obtener horarios disponibles por especialidad
 app.get('/api/schedules/:specialty', (req, res) => {
     const specialty = specialties.find(s => s.name === req.params.specialty);
-    console.log('Specialty:', specialty);
     if (specialty) {
         res.json(specialty.schedules);
         console.log(`Schedules for ${req.params.specialty}:`, specialty.schedules);
@@ -38,28 +38,29 @@ app.get('/api/schedules/:specialty', (req, res) => {
     }
 });
 
+// Endpoint para obtener todas las citas
 app.get('/api/appointments', (req, res) => {
     res.json(appointments);
 });
 
+// Endpoint para agregar una nueva cita
 app.post('/api/appointments', (req, res) => {
-    const { specialty, schedule, patient } = req.body;
+    const { specialty, schedule } = req.body;
 
-    // Validar que todos los campos estén presentes
-    if (!specialty || !schedule || !patient) {
-        console.log('Invalid appointment data');
+    // Validar que los campos obligatorios estén presentes
+    if (!specialty || !schedule) {
         console.error('Invalid appointment data:', req.body);
-        return res.status(400).json({ error: 'Missing specialty, schedule, or patient' });
+        return res.status(400).json({ error: 'Missing specialty or schedule' });
     }
 
     // Agregar la cita si los datos son válidos
-    const appointment = { specialty, schedule, patient };
+    const appointment = { specialty, schedule };
     appointments.push(appointment);
     console.log('Appointment added:', appointment);
     res.status(201).json(appointment);
 });
 
-
+// Iniciar el servidor
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
