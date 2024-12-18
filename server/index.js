@@ -12,19 +12,59 @@ app.use((req, res, next) => {
 let appointments = [];
 
 const specialties = [
-    { name: 'Cardiología', schedules: ['09:00 AM', '10:00 AM', '11:00 AM'] },
-    { name: 'Dermatología', schedules: ['01:00 PM', '02:00 PM', '03:00 PM'] },
-    { name: 'Ginecología', schedules: ['10:00 AM', '11:30 AM', '01:30 PM'] },
-    { name: 'Pediatría', schedules: ['08:00 AM', '09:30 AM', '11:00 AM'] },
-    { name: 'Neurología', schedules: ['02:00 PM', '03:30 PM', '04:00 PM'] },
-    { name: 'Oftalmología', schedules: ['09:00 AM', '11:00 AM', '01:00 PM'] },
-    { name: 'Oncología', schedules: ['10:00 AM', '12:30 PM', '02:30 PM'] }
+    { 
+        name: 'Medicina General', 
+        schedules: ['09:00 AM', '10:00 AM', '11:00 AM'], 
+        image: 'https://magnetosur.com/wp-content/uploads/2021/11/Que-diferencias-existen-entre-la-medicina-general-y-la-medicina-interna.jpg', 
+        description: 'La medicina general es la especialidad médica que se encarga de la atención integral del paciente y de la familia, abordando problemas de salud en cualquier etapa de la vida.'
+    },
+    { 
+        name: 'Oftalmología', 
+        schedules: ['01:00 PM', '02:00 PM', '03:00 PM'], 
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpfB915OjuAJvR8NlW0fv9IDZLfz3doYp_Bw&s',
+        description: 'La oftalmología es la especialidad médica que se encarga de la prevención, diagnóstico y tratamiento de enfermedades del ojo y estructuras anexas.'
+    },
+    { 
+        name: 'Dermatología', 
+        schedules: ['10:00 AM', '11:30 AM', '01:30 PM'], 
+        image: 'https://dermatologia.pe/wp-content/uploads/2023/12/Que-hay-que-estudiar-para-ser-dermatologo.jpg',
+        description: 'La dermatología es la especialidad médica que se encarga del estudio de la piel, sus estructuras, funciones y enfermedades, así como de la prevención y tratamiento de las mismas.'
+    },
+    { 
+        name: 'Nutrición', 
+        schedules: ['08:00 AM', '09:30 AM', '11:00 AM'], 
+        image: 'https://images.griddo.universitatcarlemany.com/la-importancia-de-la-nutricion-en-la-salud-1',
+        description: 'La nutrición es la ciencia que estudia los alimentos, la digestión, la absorción, el metabolismo y los efectos de los alimentos en la salud y la enfermedad.' 
+    },
+    { 
+        name: 'Psicología', 
+        schedules: ['02:00 PM', '03:30 PM', '04:00 PM'], 
+        image: 'https://static.wikia.nocookie.net/psicologia/images/7/73/Que-es-psicologia.jpg/revision/latest?cb=20181002142724&path-prefix=es',
+        description: 'La psicología es la ciencia que estudia la conducta y los procesos mentales de los individuos, así como sus relaciones con el entorno y la sociedad.'
+    },
+    { 
+        name: 'Odontología', 
+        schedules: ['09:00 AM', '11:00 AM', '01:00 PM'], 
+        image: 'https://www.teeth22.com/wp-content/uploads/2020/03/absceso-dental-800x399.png',
+        description: 'La odontología es la especialidad médica que se encarga del estudio, diagnóstico, prevención y tratamiento de las enfermedades y trastornos de la cavidad oral y estructuras anexas.'
+
+    },
+    { 
+        name: 'Ginecología', 
+        schedules: ['10:00 AM', '12:30 PM', '02:30 PM'], 
+        image: 'https://www.infobae.com/resizer/v2/MA2ENCICCBBCPKREAKQBEEVXUY.png?auth=4a071b7ecf4cdb2648d585da96889f034a8df70bb607cc1eaddd6bf972586f97&smart=true&width=350&height=214&quality=85',
+        description: 'La ginecología es la especialidad médica que se encarga del estudio, diagnóstico, prevención y tratamiento de las enfermedades del sistema reproductor femenino.'
+    },
+    {
+        name: 'Psiquiatría',
+        schedules: ['08:00 AM', '10:30 AM', '12:00 PM'],
+        image: 'https://www.hospitalhuaycan.gob.pe/assets/img/servicios/psiquiatria.jpg',
+        description: 'La psiquiatría es la especialidad médica que se encarga del estudio, diagnóstico, prevención y tratamiento de los trastornos mentales y emocionales.'
+    }
 ];
 
-// Endpoint para obtener especialidades
 app.get('/api/specialties', (req, res) => {
-    res.json(specialties.map(s => s.name));
-    console.log('Specialties:', specialties.map(s => s.name));
+    res.json(specialties);
 });
 
 // Endpoint para obtener horarios disponibles por especialidad
