@@ -36,6 +36,7 @@ function App() {
                             <Link to="/">Inicio</Link> | <Link to="/sacar-cita">Sacar Cita</Link> | <Link to="/Botica">Botica</Link> | <Link to="/Historia">Historias</Link> | <Link to="/Reembolso">Reembolso</Link> 
                             <button onClick={handleLogout}>Cerrar sesión</button>
                         </nav>
+                        
                     </header>
 
                     <Routes>

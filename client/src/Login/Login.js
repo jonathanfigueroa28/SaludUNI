@@ -27,7 +27,7 @@ function Login({ onLoginSuccess }) {
 
     return (
         <div className="login-container">
-            <h2>Iniciar sesión</h2>
+            <h2>Centro Médico</h2>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="username">Código UNI:</label>
                 <input 
@@ -35,7 +35,8 @@ function Login({ onLoginSuccess }) {
                     id="username" 
                     placeholder="Ingrese su código" 
                     value={username} 
-                    onChange={(e) => setUsername(e.target.value)} 
+                    onChange={(e) => setUsername(e.target.value.toUpperCase())}
+
                 />
                 <label htmlFor="password">Contraseña:</label>
                 <input 
