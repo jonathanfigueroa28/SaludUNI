@@ -24,11 +24,25 @@ const specialties = [
 ];
 
 const medicamentos = [
-    { id: 1, nombre: 'Paracetamol', descripcion: 'Analgésico y antipirético', stock: 50, disponible: 'Sí' },
-    { id: 2, nombre: 'Ibuprofeno', descripcion: 'Antiinflamatorio', stock: 30, disponible: 'Sí' },
-    { id: 3, nombre: 'Amoxicilina', descripcion: 'Antibiótico', stock: 0, disponible: 'No' }
+    { id: 1, nombre: 'Paracetamol', descripcion: 'Analgésico y antipirético', stock: 50, disponible: 'Sí', precio: 5, 
+        imagen: 'https://dcuk1cxrnzjkh.cloudfront.net/imagesproducto/108218L.jpg'
+    },
+    { id: 2, nombre: 'Ibuprofeno', descripcion: 'Antiinflamatorio', stock: 30, disponible: 'Sí' , precio: 4, 
+        imagen: 'https://dcuk1cxrnzjkh.cloudfront.net/imagesproducto/015814L.jpg'
+    },
+    { id: 3, nombre: 'Amoxicilina', descripcion: 'Antibiótico', stock: 0, disponible: 'No' , precio: 8, 
+        imagen: 'https://dcuk1cxrnzjkh.cloudfront.net/imagesproducto/029188L.jpg'
+    }
 ]
 
+
+const estudiantes = [
+    { codigo: '20204587B', password: 'estudiante1', nombre: 'Juan Rodríguez', matriculado: true, saldo: 50},
+    { codigo: '20187505J', password: 'estudiante2', nombre: 'José Perez', matriculado: true, saldo: 45},
+    { codigo: '20137865C', password: 'estudiante3', nombre: 'Lucía Gómez', matriculado: false, saldo: 0}
+]
+
+// const estudiante = {codigo: '20177506B', password: 'admin', nombre: 'Orfeo Fernández', matriculado: true, saldo: 30};
 
 app.get('/api/specialties', (req, res) => {
     res.json(specialties.map(s => s.name));
@@ -94,23 +108,8 @@ app.get('/api/separated-medicamentos', (req, res) => {
 
 // Medicamentos Separados - Agregar un medicamento separado
 app.post('/api/separated-medicamentos', (req, res) => {
-    /*
-    const { id, nombre, descripcion } = req.body;
-
-    if (!id || !nombre || !descripcion) {
-        console.error('Invalid medicamento data:', req.body);
-        return res.status(400).json({ error: 'Missing id, nombre, or descripcion' });
-    }
-
-    // Agregar el medicamento a la lista de separados
-    const newMedicamento = { id, nombre, descripcion };
-    separatedMedicamentos.push(newMedicamento);
-    console.log('New separated medicamento added:', newMedicamento);
-
-    res.status(201).json(newMedicamento);
-    */
-    const { id, nombre, descripcion } = req.body;
-    if (!id || !nombre || !descripcion) {
+    const { id, nombre, descripcion , codigoEstudiante} = req.body;
+    if (!id || !nombre || !descripcion || !codigoEstudiante) {
         console.error('Invalid medicamento data:', req.body);
         return res.status(400).json({ error: 'Missing id, nombre, or descripcion' });
     }
@@ -127,6 +126,22 @@ app.post('/api/separated-medicamentos', (req, res) => {
         console.warn('Insufficient stock for medicamento:', medicamento);
         return res.status(400).json({ error: 'Insufficient stock' });
     }
+
+    // Buscar al estudiante
+    const estudiante = estudiantes.find(e => e.codigo === codigoEstudiante);
+    if (!estudiante) {
+        console.error('Estudiante not found:', codigoEstudiante);
+        return res.status(404).json({ error: 'Estudiante not found' });
+    }
+    
+    // Verificar si el estudiante tiene suficiente saldo para separar el medicamento
+    if (estudiante.saldo < medicamento.precio) {
+        console.warn('Insufficient balance for student:', estudiante);
+        return res.status(400).json({ error: 'Insufficient balance' });
+    }
+
+    // Reducir el saldo del estudiante
+    estudiante.saldo -= medicamento.precio;
 
     // Reducir el stock del medicamento
     medicamento.stock -= 1;
@@ -148,6 +163,22 @@ app.post('/api/separated-medicamentos', (req, res) => {
     res.status(201).json({ message: 'Medicamento separated successfully', medicamento });
 });
 
+
+// Estudiante
+
+app.get('/api/estudiantes/:codigo', (req, res) => {
+    const {codigo} = req.params;
+    const estudiante = estudiantes.find((e) => e.codigo === codigo)
+    if (estudiante) {
+        res.json(estudiante);
+        console.log('Estudiante:', estudiante.nombre);
+    } else {
+        res.status(404).json({ mensaje: 'Estudiante no encontrado'});
+        console.log('Estudiante no encontrado');
+    }
+    
+    
+});
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
