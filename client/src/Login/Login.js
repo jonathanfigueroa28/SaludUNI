@@ -5,7 +5,7 @@ function Login({ onLoginSuccess }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-
+    const [hasError, setHasError] = useState(false)
     
     useEffect(() => {
         if (localStorage.getItem('isAuthenticated') === 'true') {
@@ -19,8 +19,10 @@ function Login({ onLoginSuccess }) {
         
         if (username === '20204055B' && password === 'password') {
             localStorage.setItem('isAuthenticated', 'true'); 
+            setHasError(false);
             onLoginSuccess();  
         } else {
+            setHasError(true);
             setErrorMessage('Credenciales incorrectas.');
         }
     };
@@ -32,7 +34,8 @@ function Login({ onLoginSuccess }) {
                 <label htmlFor="username">Código UNI:</label>
                 <input 
                     type="text" 
-                    id="username" 
+                    id="username"
+                    className={hasError ? 'input-error' : ''} 
                     placeholder="Ingrese su código" 
                     value={username} 
                     onChange={(e) => setUsername(e.target.value.toUpperCase())}
@@ -41,7 +44,8 @@ function Login({ onLoginSuccess }) {
                 <label htmlFor="password">Contraseña:</label>
                 <input 
                     type="password" 
-                    id="password" 
+                    id="password"
+                    className={hasError ? 'input-error' : ''} 
                     placeholder="Ingrese su contraseña" 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
