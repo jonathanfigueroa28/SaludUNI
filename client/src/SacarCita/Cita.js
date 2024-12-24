@@ -6,8 +6,11 @@ import './Cita.css';
 function AppointmentScheduler() {
     const [specialties, setSpecialties] = useState([]);
     const [selectedSpecialty, setSelectedSpecialty] = useState(null);
+    const [days, setDays] = useState([]);
+    const [selectedDay, setSelectedDay] = useState('');
     const [schedules, setSchedules] = useState([]);
     const [selectedSchedule, setSelectedSchedule] = useState('');
+    const [showSummary, setShowSummary] = useState(false);
 
     const navigate = useNavigate();
 
@@ -21,9 +24,18 @@ function AppointmentScheduler() {
     // Manejar clic en una especialidad
     const handleSpecialtyClick = (specialty) => {
         setSelectedSpecialty(specialty);
-        setSchedules([]); // Resetear los horarios mientras se cargan
+        setSelectedDay('');
+        setSchedules([]);
+        setSelectedSchedule('');
+        setDays(Object.keys(specialty.schedules));
+    };
 
-        axios.get(`/api/schedules/${specialty.name}`)
+    // Manejar clic en un día
+    const handleDayClick = (day) => {
+        setSelectedDay(day);
+        setSchedules([]); // Reset schedules while fetching new ones
+
+        axios.get(`/api/schedules/${selectedSpecialty.name}/${day}`)
             .then(response => setSchedules(response.data))
             .catch(error => console.error('Error fetching schedules:', error));
     };
@@ -32,7 +44,7 @@ function AppointmentScheduler() {
     const handleAddAppointment = () => {
         const newAppointment = {
             specialty: selectedSpecialty.name,
-            schedule: selectedSchedule,
+            schedule: `${selectedDay} ${selectedSchedule}`,
         };
 
         axios.post('/api/appointments', newAppointment)
@@ -43,7 +55,6 @@ function AppointmentScheduler() {
     return (
         <div>
             <h2>Selecciona una Especialidad</h2>
-            {/* Mostrar las especialidades en dos columnas */}
             <div className="specialties-grid">
                 {specialties.map(specialty => (
                     <div 
@@ -56,36 +67,63 @@ function AppointmentScheduler() {
                 ))}
             </div>
 
-            {/* Mostrar la información de la especialidad seleccionada */}
             {selectedSpecialty && (
                 <div className="specialty-info">
                     <h3>{selectedSpecialty.name}</h3>
                     <p>{selectedSpecialty.description}</p>
 
-                    {/* Mostrar horarios si están disponibles */}
-                    <h4>Horarios Disponibles</h4>
-                    {schedules.length > 0 ? (
-                        <div className="schedules">
-                            {schedules.map(schedule => (
-                                <button 
-                                    key={schedule} 
-                                    onClick={() => setSelectedSchedule(schedule)} 
-                                    className={`schedule ${selectedSchedule === schedule ? 'active' : ''}`}>
-                                    {schedule}
-                                </button>
-                            ))}
-                        </div>
-                    ) : (
-                        <p>Cargando horarios...</p>
+                    <h4>Selecciona un Día</h4>
+                    <div className="days">
+                        {days.map(day => (
+                            <button 
+                                key={day} 
+                                onClick={() => handleDayClick(day)} 
+                                className={`day ${selectedDay === day ? 'active' : ''}`}>
+                                {day}
+                            </button>
+                        ))}
+                    </div>
+
+                    {selectedDay && (
+                        <>
+                            <h4>Horarios Disponibles</h4>
+                            {schedules.length > 0 ? (
+                                <div className="schedules">
+                                    {schedules.map(schedule => (
+                                        <button 
+                                            key={schedule} 
+                                            onClick={() => setSelectedSchedule(schedule)} 
+                                            className={`schedule ${selectedSchedule === schedule ? 'active' : ''}`}>
+                                            {schedule}
+                                        </button>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p>Cargando horarios...</p>
+                            )}
+                        </>
                     )}
                 </div>
             )}
 
-            {/* Mostrar botón para confirmar la cita */}
-            {selectedSpecialty && selectedSchedule && (
-                <button onClick={handleAddAppointment} className="confirm-button">
-                    Confirmar Cita
-                </button>
+            {selectedSpecialty && selectedDay && selectedSchedule && (
+                <div>
+                    <button onClick={() => setShowSummary(true)} className="confirm-button">
+                        Confirmar Cita
+                    </button>
+                    
+                    {showSummary && (
+                        <div className="summary">
+                            <h4>Resumen de la Cita</h4>
+                            <p>Especialidad: {selectedSpecialty.name}</p>
+                            <p>Día: {selectedDay}</p>
+                            <p>Horario: {selectedSchedule}</p>
+                            <button onClick={handleAddAppointment} className="confirm-button">
+                                Confirmar
+                            </button>
+                        </div>
+                    )}
+                </div>
             )}
         </div>
     );
