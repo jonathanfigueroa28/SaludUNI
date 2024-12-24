@@ -1,4 +1,6 @@
 const express = require('express');
+const hashPassword = require('./encriptacion');
+const alumnoRoutes = require('./routes/alumnoRoutes');
 const app = express();
 const port = 3001;
 
@@ -59,6 +61,17 @@ app.post('/api/appointments', (req, res) => {
     res.status(201).json(appointment);
 });
 
+app.use('/api/alumnos', alumnoRoutes);
+
+app.post('/hash', (req, res) => {
+    const { password } = req.body;
+    if (!password) {
+        return res.status(400).send('La contraseña es requerida');
+    }
+
+    const hashedPassword = hashPassword(password);
+    res.json({ hashedPassword });
+});
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
