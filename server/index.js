@@ -61,7 +61,7 @@ app.post('/api/appointments', (req, res) => {
     res.status(201).json(appointment);
 });
 
-app.use('/api/alumnos', alumnoRoutes);
+app.use('/api/estudiantes', estudianteRoutes);
 
 app.post('/hash', (req, res) => {
     const { password } = req.body;
