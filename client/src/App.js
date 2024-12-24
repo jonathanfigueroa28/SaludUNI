@@ -2,13 +2,19 @@ import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import AppointmentScheduler from './SacarCita/Cita';
+import ScheduledAppointments from './SacarCita/Citas';
 
 function App() {
     return (
         <div className="App">
             <header>
                 <nav>
-                    <Link to="/">Inicio</Link> | <Link to="/sacar-cita ">Sacar Cita</Link> | <Link to=" /Botica">Botica</Link>| <Link to=" /Historia">Historias</Link> | <Link to=" /Reembolso">Reembolso</Link>     
+                    <Link to="/">Inicio</Link> | 
+                    <Link to="/sacar-cita">Sacar Cita</Link> | 
+                    <Link to="/botica">Botica</Link> | 
+                    <Link to="/historia">Historias</Link> | 
+                    <Link to="/reembolso">Reembolso</Link> | 
+                    <Link to="/citas-programadas">Citas Programadas</Link>
                 </nav>
             </header>
 
@@ -23,6 +29,7 @@ function App() {
                     }
                 />
                 <Route path="/sacar-cita" element={<AppointmentScheduler />} />
+                <Route path="/citas-programadas" element={<ScheduledAppointments />} />
             </Routes>
         </div>
     );
