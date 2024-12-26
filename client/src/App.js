@@ -2,6 +2,10 @@ import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import AppointmentScheduler from './SacarCita/Cita';
+// import Medicamentos from './GestionMedicamentos/Medicamentos';
+import Estudiantes from './InformacionEstudiantes/Estudiantes';
+import Medicamento from './ConsultaMedicamentos/Medicamento';
+=======
 import ScheduledAppointments from './SacarCita/Citas';
 
 function App() {
@@ -9,6 +13,7 @@ function App() {
         <div className="App">
             <header>
                 <nav>
+
                     <Link to="/">Inicio</Link> | 
                     <Link to="/sacar-cita">Sacar Cita</Link> | 
                     <Link to="/botica">Botica</Link> | 
@@ -25,10 +30,13 @@ function App() {
                         <div>
                             <h1>Centro Médico</h1>
                             <p>Bienvenido al Centro Médico. Selecciona una opción del menú.</p>
+                            <Estudiantes/>
                         </div>
                     }
                 />
                 <Route path="/sacar-cita" element={<AppointmentScheduler />} />
+                <Route path='/botica' element={<Medicamento />} />
+                <Route path='/estudiante' element={<Estudiantes />}/>
                 <Route path="/citas-programadas" element={<ScheduledAppointments />} />
             </Routes>
         </div>
