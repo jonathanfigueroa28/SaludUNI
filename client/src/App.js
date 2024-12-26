@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import AppointmentScheduler from './SacarCita/Cita';
-import Login from './Login/Login';
 import Estudiantes from './InformacionEstudiantes/Estudiantes';
 import Medicamento from './ConsultaMedicamentos/Medicamento';
 import ScheduledAppointments from './SacarCita/Citas';
@@ -27,12 +26,8 @@ function App() {
 
     return (
         <div className="App">
-            {!isAuthenticated ? (
-                <Routes>
-                    <Route path="/" element={<Login onLoginSuccess={handleLoginSuccess} />} />
-                </Routes>
-            ) : (
-                <>
+            
+                
                     <header>
                         <nav>
                             <Link to="/">Inicio</Link> | 
@@ -60,8 +55,8 @@ function App() {
                         <Route path="/estudiante" element={<Estudiantes />} />
                         <Route path="/citas-programadas" element={<ScheduledAppointments />} />
                     </Routes>
-                </>
-            )}
+                
+           
         </div>
     );
 }
