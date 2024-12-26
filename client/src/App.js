@@ -1,16 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import AppointmentScheduler from './SacarCita/Cita';
+import Login from './Login/Login';
 // import Medicamentos from './GestionMedicamentos/Medicamentos';
 import Estudiantes from './InformacionEstudiantes/Estudiantes';
 import Medicamento from './ConsultaMedicamentos/Medicamento';
-=======
 import ScheduledAppointments from './SacarCita/Citas';
-
 function App() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    
+    useEffect(() => {
+        if (localStorage.getItem('isAuthenticated') === 'true') {
+            setIsAuthenticated(true);
+        }
+    }, []);
+
+    const handleLoginSuccess = () => {
+        setIsAuthenticated(true);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('isAuthenticated');  
+        setIsAuthenticated(false);
+    };
+
     return (
         <div className="App">
+            {!isAuthenticated ? (
+                <Routes>
+                    <Route path="/" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+                </Routes>
+            ) : (
+                <>
             <header>
                 <nav>
 
@@ -39,8 +62,13 @@ function App() {
                 <Route path='/estudiante' element={<Estudiantes />}/>
                 <Route path="/citas-programadas" element={<ScheduledAppointments />} />
             </Routes>
+//aniadido
+
+ )}
         </div>
     );
 }
 
 export default App;
+
+
