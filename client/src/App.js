@@ -3,7 +3,6 @@ import { Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import AppointmentScheduler from './SacarCita/Cita';
 import Login from './Login/Login';
-// import Medicamentos from './GestionMedicamentos/Medicamentos';
 import Estudiantes from './InformacionEstudiantes/Estudiantes';
 import Medicamento from './ConsultaMedicamentos/Medicamento';
 import ScheduledAppointments from './SacarCita/Citas';
