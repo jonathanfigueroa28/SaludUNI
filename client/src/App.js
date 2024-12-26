@@ -2,10 +2,8 @@ import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import AppointmentScheduler from './SacarCita/Cita';
-// import Medicamentos from './GestionMedicamentos/Medicamentos';
 import Estudiantes from './InformacionEstudiantes/Estudiantes';
 import Medicamento from './ConsultaMedicamentos/Medicamento';
-=======
 import ScheduledAppointments from './SacarCita/Citas';
 
 function App() {
