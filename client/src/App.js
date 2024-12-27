@@ -32,9 +32,7 @@ function App() {
                         <nav>
                             <Link to="/">Inicio</Link> | 
                             <Link to="/sacar-cita">Sacar Cita</Link> | 
-                            <Link to="/botica">Botica</Link> | 
-                            <Link to="/historia">Historias</Link> | 
-                            <Link to="/reembolso">Reembolso</Link> | 
+                            <Link to="/botica">Botica</Link> |  
                             <Link to="/citas-programadas">Citas Programadas</Link>
                         </nav>
                     </header>
