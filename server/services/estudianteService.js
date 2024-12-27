@@ -2,10 +2,10 @@ const db = require('../db'); // Conexión a la base de datos
 const bcrypt = require('bcrypt'); // Para hashear contraseñas
 const { Pool } = require('pg');
 const pool = new Pool({
-    user: 'admin',
+    user: 'postgres',
     host: 'localhost',
-    database: 'centro_medico_db2',
-    password: '12345',
+    database: 'basbas',
+    password: 'admin',
     port: 5432,
   });
 // Función para insertar un nuevo estudiante
