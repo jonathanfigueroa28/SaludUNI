@@ -8,7 +8,7 @@ import ScheduledAppointments from './SacarCita/Citas';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+    
     useEffect(() => {
         if (localStorage.getItem('isAuthenticated') === 'true') {
             setIsAuthenticated(true);

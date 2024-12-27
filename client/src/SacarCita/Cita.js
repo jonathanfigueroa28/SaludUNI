@@ -105,25 +105,32 @@ function AppointmentScheduler() {
                     )}
                 </div>
             )}
-
+            
             {selectedSpecialty && selectedDay && selectedSchedule && (
-                <div>
+                <>
                     <button onClick={() => setShowSummary(true)} className="confirm-button">
-                        Confirmar Cita
+                        Elegir Horario
                     </button>
                     
                     {showSummary && (
-                        <div className="summary">
-                            <h4>Resumen de la Cita</h4>
-                            <p>Especialidad: {selectedSpecialty.name}</p>
-                            <p>Día: {selectedDay}</p>
-                            <p>Horario: {selectedSchedule}</p>
-                            <button onClick={handleAddAppointment} className="confirm-button">
-                                Confirmar
-                            </button>
-                        </div>
+                            <div className="modal-content">
+                                <h4 className="modal-title">¿Confirmar Cita?</h4>
+                                <div className="modal-summary">
+                                    <p><strong>Especialidad:</strong> {selectedSpecialty.name}</p>
+                                    <p><strong>Día:</strong> {selectedDay}</p>
+                                    <p><strong>Horario:</strong> {selectedSchedule}</p>
+                                </div>
+                                <div>
+                                    <button onClick={handleAddAppointment} className="modal-confirm-button">
+                                        Confirmar
+                                    </button>
+                                    <button onClick={() => setShowSummary(false)} className="modal-cancel-button">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
                     )}
-                </div>
+                </>
             )}
         </div>
     );
