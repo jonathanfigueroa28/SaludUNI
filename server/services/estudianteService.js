@@ -1,6 +1,13 @@
 const db = require('../db'); // Conexión a la base de datos
 const bcrypt = require('bcrypt'); // Para hashear contraseñas
-
+const { Pool } = require('pg');
+const pool = new Pool({
+    user: 'admin',
+    host: 'localhost',
+    database: 'centro_medico_db2',
+    password: '12345',
+    port: 5432,
+  });
 // Función para insertar un nuevo estudiante
 async function insertarEstudiante({
     nombre,
@@ -30,7 +37,18 @@ async function obtenerEstudiantes() {
     return await db.query(sql); // No devolvemos la contraseña por seguridad
 }
 
+async function obtenerEstudiantePorCodigo(codigo) {
+    try {
+        const sql = 'SELECT id, nombre, apellido, dni, correo, telefono, saldo, flg_autoseguro, contraseña FROM estudiantes WHERE dni = $1';
+        const result = await pool.query(sql, [codigo]);
+        return result.rows[0]; 
+    } catch (error) {
+        throw new Error('Error al obtener el estudiante: ' + error.message);
+    }
+}
 module.exports = {
     insertarEstudiante,
-    obtenerEstudiantes
+    obtenerEstudiantes,
+    obtenerEstudiantePorCodigo
 };
+

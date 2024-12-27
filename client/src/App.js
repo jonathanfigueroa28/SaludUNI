@@ -5,9 +5,10 @@ import AppointmentScheduler from './SacarCita/Cita';
 import Estudiantes from './InformacionEstudiantes/Estudiantes';
 import Medicamento from './ConsultaMedicamentos/Medicamento';
 import ScheduledAppointments from './SacarCita/Citas';
-
+import Login from './Login/Login';
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const codigoEstudiante = localStorage.getItem('codigoEstudiante');
 
     useEffect(() => {
         if (localStorage.getItem('isAuthenticated') === 'true') {
@@ -26,7 +27,13 @@ function App() {
 
     return (
         <div className="App">
-            
+            {!isAuthenticated ? (
+                <Routes>
+                    <Route path="/" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+                </Routes>
+            ) : (
+                <>
+
                 
                     <header>
                         <nav>
@@ -36,6 +43,7 @@ function App() {
                             <Link to="/historia">Historias</Link> | 
                             <Link to="/reembolso">Reembolso</Link> | 
                             <Link to="/citas-programadas">Citas Programadas</Link>
+                            <button onClick={handleLogout}>Cerrar sesión</button>
                         </nav>
                     </header>
 
@@ -45,7 +53,7 @@ function App() {
                             element={
                                 <div>
                                     <h1>Centro Médico</h1>
-                                    <p>Bienvenido al Centro Médico. Selecciona una opción del menú.</p>
+                                    <p>Bienvenido al Centro Médico.Selecciona una opción del menú.</p>
                                     <Estudiantes />
                                 </div>
                             }
@@ -55,8 +63,8 @@ function App() {
                         <Route path="/estudiante" element={<Estudiantes />} />
                         <Route path="/citas-programadas" element={<ScheduledAppointments />} />
                     </Routes>
-                
-           
+                </>
+            )}           
         </div>
     );
 }
