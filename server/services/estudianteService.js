@@ -1,5 +1,10 @@
 const db = require('../db'); // Conexión a la base de datos
-const bcrypt = require('bcrypt'); // Para hashear contraseñas
+const crypto = require('crypto'); // Para hashear contraseñas
+
+// Función para hashear contraseñas usando SHA-256
+function hashPassword(password) {
+    return crypto.createHash('sha256').update(password).digest('hex');
+}
 
 // Función para insertar un nuevo estudiante
 async function insertarEstudiante({
@@ -12,8 +17,7 @@ async function insertarEstudiante({
     flg_autoseguro,
     contraseña
 }) {
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(contraseña, saltRounds); // Hasheamos la contraseña
+    const hashedPassword = hashPassword(contraseña); // Hasheamos la contraseña
 
     const sql = `
         INSERT INTO estudiantes (nombre, apellido, dni, correo, telefono, saldo, flg_autoseguro, contraseña)

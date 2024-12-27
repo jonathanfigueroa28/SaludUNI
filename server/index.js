@@ -1,6 +1,6 @@
 const express = require('express');
 const hashPassword = require('./encriptacion');
-const alumnoRoutes = require('./routes/alumnoRoutes');
+const estudianteRoutes = require('./routes/estudianteRoutes');
 const app = express();
 const port = 3001;
 

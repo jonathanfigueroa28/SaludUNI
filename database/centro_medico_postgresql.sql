@@ -5,7 +5,7 @@
 -- Dumped from database version 15.3
 -- Dumped by pg_dump version 15.3
 
--- Started on 2024-12-23 22:18:03
+-- Started on 2024-12-27 17:47:31
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -523,6 +523,7 @@ COPY public.estudiantes (id, nombre, apellido, dni, correo, telefono, saldo, flg
 4	Carlos	Sanchez	75678912	carlos.sanchez@uni.pe	976543210	700.00	t	da114e93958eee73f1b2ec96f2c4df0d032cb565d735554ae3ee759b7f98983f
 5	Ana	Gomez	78912345	ana.gomez@uni.pe	978654321	650.00	t	0492bcb60cb4e709c6ac1a1beb97a1e52cdcdcccb8dd17fb1922d0319eaa2812
 6	Lucia	Ramirez	72165487	lucia.ramirez@uni.pe	986123456	550.00	t	b64bd7249a8a1311587e8c6ea83f45b9ae78fd3efa0c55d42950fea56ecf6b86
+7	César	Pérez	12345678	cesar.perez@example.com	987654321	1000.00	t	$2b$10$ZYCOBf66m8LCzf6mhklPsO39VKSdTsdT24NOCQQTtXeLdMkB.6aim
 \.
 
 
@@ -750,7 +751,7 @@ SELECT pg_catalog.setval('public.especialidades_id_seq', 5, true);
 -- Name: estudiantes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.estudiantes_id_seq', 6, true);
+SELECT pg_catalog.setval('public.estudiantes_id_seq', 7, true);
 
 
 --
@@ -987,7 +988,7 @@ ALTER TABLE ONLY public.solicitudes_reembolso
     ADD CONSTRAINT solicitudes_reembolso_medicamento_id_fkey FOREIGN KEY (medicamento_id) REFERENCES public.medicamentos(id) ON DELETE CASCADE;
 
 
--- Completed on 2024-12-23 22:18:03
+-- Completed on 2024-12-27 17:47:31
 
 --
 -- PostgreSQL database dump complete
