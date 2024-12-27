@@ -16,7 +16,7 @@ function AppointmentScheduler() {
 
     // Cargar especialidades desde el backend
     useEffect(() => {
-        axios.get('/api/specialties')
+        axios.get('/api/cita/especialidades')
             .then(response => setSpecialties(response.data))
             .catch(error => console.error('Error fetching specialties:', error));
     }, []);

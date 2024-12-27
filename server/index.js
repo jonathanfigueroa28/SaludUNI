@@ -1,6 +1,7 @@
 const express = require('express');
 const hashPassword = require('./encriptacion');
 const estudianteRoutes = require('./routes/estudianteRoutes');
+const citaRoutes = require('./routes/citaRoutes');
 const app = express();
 const port = 3001;
 
@@ -169,6 +170,9 @@ app.post('/api/appointments', (req, res) => {
 });
 
 app.use('/api/estudiantes', estudianteRoutes);
+app.use('/api/cita', citaRoutes);
+
+
 
 app.post('/hash', (req, res) => {
     const { password } = req.body;
