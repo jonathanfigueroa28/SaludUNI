@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import './App.css';
 import AppointmentScheduler from './SacarCita/Cita';
 import Estudiantes from './InformacionEstudiantes/Estudiantes';
@@ -9,6 +9,7 @@ import Login from './Login/Login';
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const codigoEstudiante = localStorage.getItem('codigoEstudiante');
+    const navigate = useNavigate(); // Hook para navegación programática
 
     useEffect(() => {
         if (localStorage.getItem('isAuthenticated') === 'true') {
@@ -23,6 +24,7 @@ function App() {
     const handleLogout = () => {
         localStorage.removeItem('isAuthenticated');  
         setIsAuthenticated(false);
+        navigate('/'); // Redirige a la ventana de login
     };
 
     return (
