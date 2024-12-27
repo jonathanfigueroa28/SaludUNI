@@ -11,6 +11,7 @@ function App() {
     const codigoEstudiante = localStorage.getItem('codigoEstudiante');
     const navigate = useNavigate(); // Hook para navegación programática
 
+
     useEffect(() => {
         if (localStorage.getItem('isAuthenticated') === 'true') {
             setIsAuthenticated(true);
@@ -41,9 +42,7 @@ function App() {
                         <nav>
                             <Link to="/">Inicio</Link> | 
                             <Link to="/sacar-cita">Sacar Cita</Link> | 
-                            <Link to="/botica">Botica</Link> | 
-                            <Link to="/historia">Historias</Link> | 
-                            <Link to="/reembolso">Reembolso</Link> | 
+                            <Link to="/botica">Botica</Link> |  
                             <Link to="/citas-programadas">Citas Programadas</Link>
                             <button onClick={handleLogout}>Cerrar sesión</button>
                         </nav>
