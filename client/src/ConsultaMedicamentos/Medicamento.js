@@ -105,12 +105,8 @@ return (
             </div>
         )}
 
-        {/* Botón para mostrar la lista de medicamentos separados */}
-        <button onClick={toggleSeparatedMedicamentos}>
-            {showSeparated ? 'Ocultar medicamentos separados' : 'Mostrar medicamentos separados'}
-        </button>
+       
 
-        {/* Mostrar los medicamentos separados */}
         
         {showSeparated && separatedMedicamentos.length > 0 && (
             <div className='separated-medicamentos'>

@@ -1,4 +1,6 @@
 const express = require('express');
+const hashPassword = require('./encriptacion');
+const estudianteRoutes = require('./routes/estudianteRoutes');
 const app = express();
 const port = 3001;
 
@@ -166,6 +168,17 @@ app.post('/api/appointments', (req, res) => {
     res.status(201).json(appointment);
 });
 
+app.use('/api/estudiantes', estudianteRoutes);
+
+app.post('/hash', (req, res) => {
+    const { password } = req.body;
+    if (!password) {
+        return res.status(400).send('La contraseña es requerida');
+    }
+
+    const hashedPassword = hashPassword(password);
+    res.json({ hashedPassword });
+});
 // Rutas para Medicamentos// Rutas para Medicamentos// Rutas para Medicamentos// Rutas para Medicamentos// Rutas para Medicamentos// Rutas para Medicamentos
 
 // Rutas para Medicamentos
