@@ -5,7 +5,7 @@
 -- Dumped from database version 15.3
 -- Dumped by pg_dump version 15.3
 
--- Started on 2024-12-27 17:47:31
+-- Started on 2024-12-27 18:28:48
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -111,7 +111,9 @@ ALTER SEQUENCE public.doctores_id_seq OWNED BY public.doctores.id;
 
 CREATE TABLE public.especialidades (
     id integer NOT NULL,
-    nombre character varying(100) NOT NULL
+    nombre character varying(100) NOT NULL,
+    descripcion text,
+    url text
 );
 
 
@@ -502,12 +504,12 @@ COPY public.doctores (id, nombre, apellido, especialidad_id) FROM stdin;
 -- Data for Name: especialidades; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.especialidades (id, nombre) FROM stdin;
-1	Consultorio General
-2	Odontologia
-3	Psicologia
-4	Area de Medicina Fisica
-5	Rehabilitación
+COPY public.especialidades (id, nombre, descripcion, url) FROM stdin;
+1	Consultorio General	La medicina general es la especialidad médica que se encarga de la atención integral del paciente y de la familia, abordando problemas de salud en cualquier etapa de la vida	https://magnetosur.com/wp-content/uploads/2021/11/Que-diferencias-existen-entre-la-medicina-general-y-la-medicina-interna.jpg'
+2	Odontologia	La odontología es la especialidad médica que se encarga del estudio, diagnóstico, prevención y tratamiento de las enfermedades y trastornos de la cavidad oral y estructuras anexas.	https://www.teeth22.com/wp-content/uploads/2020/03/absceso-dental-800x399.png'
+3	Psicologia	'La psicología es la ciencia que estudia la conducta y los procesos mentales de los individuos, así como sus relaciones con el entorno y la sociedad.	https://static.wikia.nocookie.net/psicologia/images/7/73/Que-es-psicologia.jpg/revision/latest?cb=20181002142724&path-prefix=es%27
+4	Nutricion	El area de medicina fisica se encarga de la nutricion 	https://images.griddo.universitatcarlemany.com/la-importancia-de-la-nutricion-en-la-salud-1'
+5	Dermatología	La dermatología es la especialidad médica que se encarga del estudio de la piel, sus estructuras, funciones y enfermedades, así como de la prevención y tratamiento de las mismas.	https://dermatologia.pe/wp-content/uploads/2023/12/Que-hay-que-estudiar-para-ser-dermatologo.jpg'
 \.
 
 
@@ -523,7 +525,7 @@ COPY public.estudiantes (id, nombre, apellido, dni, correo, telefono, saldo, flg
 4	Carlos	Sanchez	75678912	carlos.sanchez@uni.pe	976543210	700.00	t	da114e93958eee73f1b2ec96f2c4df0d032cb565d735554ae3ee759b7f98983f
 5	Ana	Gomez	78912345	ana.gomez@uni.pe	978654321	650.00	t	0492bcb60cb4e709c6ac1a1beb97a1e52cdcdcccb8dd17fb1922d0319eaa2812
 6	Lucia	Ramirez	72165487	lucia.ramirez@uni.pe	986123456	550.00	t	b64bd7249a8a1311587e8c6ea83f45b9ae78fd3efa0c55d42950fea56ecf6b86
-7	César	Pérez	12345678	cesar.perez@example.com	987654321	1000.00	t	$2b$10$ZYCOBf66m8LCzf6mhklPsO39VKSdTsdT24NOCQQTtXeLdMkB.6aim
+7	César	Pérez	12345678	cesar.perez@uni.pe	987654321	1000.00	t	$2b$10$ZYCOBf66m8LCzf6mhklPsO39VKSdTsdT24NOCQQTtXeLdMkB.6aim
 \.
 
 
@@ -988,7 +990,7 @@ ALTER TABLE ONLY public.solicitudes_reembolso
     ADD CONSTRAINT solicitudes_reembolso_medicamento_id_fkey FOREIGN KEY (medicamento_id) REFERENCES public.medicamentos(id) ON DELETE CASCADE;
 
 
--- Completed on 2024-12-27 17:47:31
+-- Completed on 2024-12-27 18:28:48
 
 --
 -- PostgreSQL database dump complete
