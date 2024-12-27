@@ -1,115 +1,132 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Cita.css';
 
 function AppointmentScheduler() {
     const [specialties, setSpecialties] = useState([]);
+    const [selectedSpecialty, setSelectedSpecialty] = useState(null);
+    const [days, setDays] = useState([]);
+    const [selectedDay, setSelectedDay] = useState('');
     const [schedules, setSchedules] = useState([]);
-    const [appointments, setAppointments] = useState([]);
-    const [selectedSpecialty, setSelectedSpecialty] = useState('');
     const [selectedSchedule, setSelectedSchedule] = useState('');
-    const [patientName, setPatientName] = useState('');
+    const [showSummary, setShowSummary] = useState(false);
 
+    const navigate = useNavigate();
+
+    // Cargar especialidades desde el backend
     useEffect(() => {
         axios.get('/api/specialties')
             .then(response => setSpecialties(response.data))
             .catch(error => console.error('Error fetching specialties:', error));
-
-        axios.get('/api/appointments')
-            .then(response => setAppointments(response.data))
-            .catch(error => console.error('Error fetching appointments:', error));
     }, []);
 
-    const fetchSchedules = (specialty) => {
-        console.log('Fetching schedules for:', specialty);
-        axios.get(`/api/schedules/${specialty}`)
-            .then(response => {
-                console.log('Schedules received:', response.data);
-                setSchedules(response.data);
-            })
-            .catch(error => console.error('Error fetching schedules:', error));
-    };
-    
-
+    // Manejar clic en una especialidad
     const handleSpecialtyClick = (specialty) => {
         setSelectedSpecialty(specialty);
-        fetchSchedules(specialty);
+        setSelectedDay('');
+        setSchedules([]);
+        setSelectedSchedule('');
+        setDays(Object.keys(specialty.schedules));
     };
 
+    // Manejar clic en un día
+    const handleDayClick = (day) => {
+        setSelectedDay(day);
+        setSchedules([]); // Reset schedules while fetching new ones
+
+        axios.get(`/api/schedules/${selectedSpecialty.name}/${day}`)
+            .then(response => setSchedules(response.data))
+            .catch(error => console.error('Error fetching schedules:', error));
+    };
+
+    // Confirmar la cita
     const handleAddAppointment = () => {
-    const newAppointment = { 
-        specialty: selectedSpecialty, 
-        schedule: selectedSchedule, 
-        patient: patientName 
+        const newAppointment = {
+            specialty: selectedSpecialty.name,
+            schedule: `${selectedDay} ${selectedSchedule}`,
+        };
+
+        axios.post('/api/appointments', newAppointment)
+            .then(() => navigate('/citas-programadas'))
+            .catch(error => console.error('Error adding appointment:', error));
     };
-
-    console.log('Appointment to send:', newAppointment);
-
-    axios.post('/api/appointments', newAppointment)
-        .then(response => {
-            setAppointments([...appointments, response.data]);
-        })
-        .catch(error => console.error('Error adding appointment:', error));
-};
-
 
     return (
         <div>
             <h2>Selecciona una Especialidad</h2>
-            <div className="specialties">
+            <div className="specialties-grid">
                 {specialties.map(specialty => (
-                    <button 
-                        key={specialty} 
-                        onClick={() => handleSpecialtyClick(specialty)} 
-                        className={`specialty ${selectedSpecialty === specialty ? 'active' : ''}`}>
-                        {specialty}
-                    </button>
+                    <div 
+                        key={specialty.name} 
+                        className={`specialty-card ${selectedSpecialty?.name === specialty.name ? 'active' : ''}`} 
+                        onClick={() => handleSpecialtyClick(specialty)}>
+                        <img src={specialty.image} alt={specialty.name} className="specialty-image" />
+                        <p>{specialty.name}</p>
+                    </div>
                 ))}
             </div>
 
             {selectedSpecialty && (
-                <>
-                    <h3>Horarios Disponibles para {selectedSpecialty}</h3>
-                    <div className="schedules">
-                        {schedules.map(schedule => (
+                <div className="specialty-info">
+                    <h3>{selectedSpecialty.name}</h3>
+                    <p>{selectedSpecialty.description}</p>
+
+                    <h4>Selecciona un Día</h4>
+                    <div className="days">
+                        {days.map(day => (
                             <button 
-                                key={schedule} 
-                                onClick={() => setSelectedSchedule(schedule)} 
-                                className={`schedule ${selectedSchedule === schedule ? 'active' : ''}`}>
-                                {schedule}
+                                key={day} 
+                                onClick={() => handleDayClick(day)} 
+                                className={`day ${selectedDay === day ? 'active' : ''}`}>
+                                {day}
                             </button>
                         ))}
                     </div>
-                </>
+
+                    {selectedDay && (
+                        <>
+                            <h4>Horarios Disponibles</h4>
+                            {schedules.length > 0 ? (
+                                <div className="schedules">
+                                    {schedules.map(schedule => (
+                                        <button 
+                                            key={schedule} 
+                                            onClick={() => setSelectedSchedule(schedule)} 
+                                            className={`schedule ${selectedSchedule === schedule ? 'active' : ''}`}>
+                                            {schedule}
+                                        </button>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p>Cargando horarios...</p>
+                            )}
+                        </>
+                    )}
+                </div>
             )}
 
-            {selectedSchedule && (
-                <>
-                    <h3>Agendar Cita</h3>
-                    <label>
-                        Nombre del Paciente:
-                        <input 
-                            type="text" 
-                            value={patientName} 
-                            onChange={e => setPatientName(e.target.value)} 
-                        />
-                    </label>
-                    <button onClick={handleAddAppointment}>Confirmar Cita</button>
-                </>
+            {selectedSpecialty && selectedDay && selectedSchedule && (
+                <div>
+                    <button onClick={() => setShowSummary(true)} className="confirm-button">
+                        Confirmar Cita
+                    </button>
+                    
+                    {showSummary && (
+                        <div className="summary">
+                            <h4>Resumen de la Cita</h4>
+                            <p>Especialidad: {selectedSpecialty.name}</p>
+                            <p>Día: {selectedDay}</p>
+                            <p>Horario: {selectedSchedule}</p>
+                            <button onClick={handleAddAppointment} className="confirm-button">
+                                Confirmar
+                            </button>
+                        </div>
+                    )}
+                </div>
             )}
-
-            <h2>Citas Programadas</h2>
-            <ul>
-                {appointments.map((appointment, index) => (
-                    <li key={index}>{appointment.patient} - {appointment.specialty} ({appointment.schedule})</li>
-                ))}
-            </ul>
-
-            <Link to="/">Volver a Inicio</Link>
         </div>
     );
 }
 
 export default AppointmentScheduler;
-
