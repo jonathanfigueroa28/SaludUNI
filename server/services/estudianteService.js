@@ -4,7 +4,7 @@ const { Pool } = require('pg');
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
-    database: 'basbas',
+    database: 'centro_medico_postgresql',
     password: 'admin',
     port: 5432,
   });
@@ -41,7 +41,7 @@ async function obtenerEstudiantePorCodigo(codigo) {
     try {
         const sql = 'SELECT id, nombre, apellido, dni, correo, telefono, saldo, flg_autoseguro, contraseña FROM estudiantes WHERE dni = $1';
         const result = await pool.query(sql, [codigo]);
-        return result.rows[0]; 
+        return result.rows[1]; 
     } catch (error) {
         throw new Error('Error al obtener el estudiante: ' + error.message);
     }
